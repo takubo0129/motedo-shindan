@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>製作者炎上不可避！名前モテ診断ツール ver1.0</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      padding: 40px;
+      transition: background 0.5s ease;
+    }
+
+    h1 {
+      font-size: 32px;
+      color: #ff69b4;
+      margin-bottom: 30px;
+    }
+
+    #nameInput {
+      width: 60%;
+      padding: 15px;
+      font-size: 20px;
+      border-radius: 10px;
+      border: 2px solid #ccc;
+    }
+
+    #modeButtons {
+      margin-top: 20px;
+    }
+
+    #modeButtons button {
+      font-size: 16px;
+      padding: 10px 20px;
+      margin: 5px;
+      border: none;
+      border-radius: 8px;
+      color: white;
+      cursor: pointer;
+    }
+
+    #modeButtons button:nth-child(1) { background-color: #4682b4; }
+    #modeButtons button:nth-child(2) { background-color: #ff69b4; }
+    #modeButtons button:nth-child(3) { background-color: #9370db; }
+
+    #diagnoseBtn {
+      margin-top: 30px;
+      padding: 15px 30px;
+      font-size: 22px;
+      background: linear-gradient(to right, #ffb6c1, #ffa07a);
+      border: none;
+      border-radius: 30px;
+      color: white;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      cursor: pointer;
+    }
+
+    #result {
+      margin-top: 40px;
+      font-size: 24px;
+      background-color: rgba(255,240,245,0.9);
+      padding: 30px;
+      border: 2px dashed #ffb6c1;
+      border-radius: 20px;
+      color: #8b008b;
+      width: 80%;
+      margin-left: auto;
+      margin-right: auto;
+      white-space: pre-wrap;
+    }
+
+    body.normal-mode {
+      background: url('bg_normal.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body.praise-mode {
+      background: url('bg_praise.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body.insult-mode {
+      background: url('bg_insult.png') no-repeat center center fixed;
+      background-size: cover;
+    }
+  </style>
+</head>
+<body class="normal-mode">
+  <h1>製作者炎上不可避！<br>名前モテ診断ツール ver1.0</h1>
+
+  <input type="text" id="nameInput" placeholder="あなたの名前を入力">
+
+  <div id="modeButtons">
+    <button onclick="setMode('normal')">ノーマルモード</button>
+    <button onclick="setMode('praise')">接待モード</button>
+    <button onclick="setMode('insult')">辛辣モード</button>
+  </div>
+
+  <button id="diagnoseBtn">診断する！</button>
+
+  <p id="result">ここに結果が表示されます。</p>
+
+  <audio id="starSound" src="https://soundeffect-lab.info/sound/anime/mp3/shine1.mp3" preload="auto"></audio>
+
+  <script>
+    window.mode = "normal";
+
+    window.setMode = function(selectedMode) {
+      mode = selectedMode;
+      document.body.className = "";
+      document.body.classList.add(mode + "-mode");
+      playStarSound();
+    };
+
+    function playStarSound() {
+      const sound = document.getElementById("starSound");
+      sound.currentTime = 0;
+      sound.play().catch(() => {
+        console.log("音声自動再生ブロック（操作が必要）");
+      });
+    }
+
+    window.diagnose = function() {
+      const name = document.getElementById("nameInput").value.trim();
+      const result = document.getElementById("result");
+
+      if (!name) {
+        result.innerText = "名前を入力してください！";
+        return;
+      }
+
+      let score;
+      if (mode === "normal") {
+        score = Math.floor(Math.random() * 101);
+      } else if (mode === "praise") {
+        score = 120;
+      } else if (mode === "insult") {
+        score = -120;
+      }
+
+      let comment = "";
+      let rank = "";
+
+      if (score === 120) {
+        rank = "🌟神モテ🌟";
+        comment = "う、うわぁ!‼️‼️ダメだ‼️💕画面をまともに見れない‼️……魅力的すぎる‼️🫣💖心拍数が……❤️‍🔥( ﾟ∀ﾟ):∵ｸﾞﾊｯ!!…（尊死）。";
+      } else if (score === -120) {
+        rank = "モテません。";
+        comment = "改名しよ。以上。";
+      } else {
+        if (score >= 91) {
+          rank = "絶モテ";
+          comment = "え、逆になんか言うことある？もういいよ。神なんだから。";
+        } else if (score >= 81) {
+          rank = "爆モテ";
+          comment = "世間は許してくれやぁせぇよ……（♡）";
+        } else if (score >= 71) {
+          rank = "激モテ";
+          comment = "ﾄｩﾝｸ……あ、危ねぇ落ちるとこだった…（汗）";
+        } else if (score >= 61) {
+          rank = "超モテ";
+          comment = "いや、この数字は勝ち組な？君まだ余力残してるでしょ？";
+        } else if (score >= 51) {
+          rank = "モテモテ";
+          comment = "半分超えてんだよ？普通に喜びなぁ？";
+        } else if (score >= 41) {
+          rank = "まぁモテ";
+          comment = "まぁ、名前だけで診断とか無理だからマジで。全然気にしなくていいよ。※矛先は開発者へ";
+        } else if (score >= 31) {
+          rank = "ちょいモテ";
+          comment = "いやぁ、人って結局中身だから……中身！心配しなくていいからね！";
+        } else if (score >= 21) {
+          rank = "ほぼモテ";
+          comment = "まぁ……あれよな？本気出してないだけだもんな……（小声）";
+        } else if (score >= 11) {
+          rank = "これからモテ";
+          comment = "気にするな！開発者が全て悪いからな！今から殴りに行ってくる！";
+        } else if (score >= 1) {
+          rank = "きっとモテ";
+          comment = "うん……。えーと…ひとつ言えるのは、開発者が1番モテないよね!!!!（圧）";
+        } else {
+          rank = "きっとモテ";
+          comment = "うん……えっと、なんだろう……ホントごめんね。マジで……。うん……ホントに……。";
+        }
+      }
+
+      result.innerText = `${name}さんのモテ度は… ${score}%！\n診断結果：『${rank}』\n${comment}`;
+    };
+
+    document.getElementById("diagnoseBtn").addEventListener("click", diagnose);
+  </script>
+</body>
+</html>
